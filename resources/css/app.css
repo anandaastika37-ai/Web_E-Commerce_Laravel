@@ -1,0 +1,11 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@theme {
+    --font-dm-sans: "DM Sans", sans-serif;
+    --font-commissioner: "Commissioner", sans-serif;
+    --font-domine: "Domine", serif;
+    --font-figtree: "Figtree", sans-serif;
+}
