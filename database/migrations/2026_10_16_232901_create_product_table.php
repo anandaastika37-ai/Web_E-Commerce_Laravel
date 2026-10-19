@@ -14,12 +14,10 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
             $table->string('name');
             $table->string('slug')->unique();
-            $table->string('sku', 50)->unique();
             $table->string('brand', 100)->nullable();
             $table->text('description')->nullable();
             $table->enum('gender', ['pria', 'wanita', 'unisex', 'anak'])->default('unisex');
             $table->string('material', 100)->nullable();
-            $table->text('care_instruction')->nullable();
             $table->unsignedInteger('price');
             $table->unsignedInteger('discount_price')->nullable();
             $table->unsignedSmallInteger('weight')->default(0);
@@ -43,14 +41,6 @@ return new class extends Migration
             $table->unique(['product_id', 'size', 'color']);
         });
 
-        // Galeri foto produk
-        Schema::create('product_images', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
-            $table->string('path');
-            $table->unsignedTinyInteger('sort_order')->default(0);
-            $table->timestamps();
-        });
     }
 
     public function down(): void
