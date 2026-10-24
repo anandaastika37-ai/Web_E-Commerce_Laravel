@@ -10,7 +10,7 @@ class ProductVariant extends Model
 {
     protected $fillable = ['sku' , 'size' , 'color' , 'color_hex' , 'stock', 'price'];
 
-    public function Product(): BelongsTo{
+    public function product(): BelongsTo{
         return $this->belongsTo(Product::class);
     }
 }

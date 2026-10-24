@@ -8,10 +8,10 @@
             <a href=""><i class="fa-solid fa-cart-shopping text-xl text-violet-500"></i></a>
             <a href=""><i class="fa-solid fa-bell text-xl text-violet-500"></i></a>
         </div>
-        <div class="login hidden">
-            <a href="" class="bg-indigo-600 py-1.5 text-sm px-4 rounded-md text-white font-semibold">Login</a>
+        <div class="login ">
+            <a href="/login" class="bg-indigo-600 py-1.5 text-sm px-4 rounded-md text-white font-semibold">Login</a>
         </div>
-        <a href="/dashboard" class="user flex items-center justify-center gap-2.5 border border-gray-200 py-1 px-2 rounded-xl">
+        <a href="/dashboard" class="user items-center justify-center gap-2.5 border border-gray-200 py-1 px-2 rounded-xl hidden">
             <div class="bg-blue-600 py-1 px-2.5 text-sm rounded-full inline-block font-black text-white ">A</div>
             <h2 class="font-dm-sans font-semibold text-gray-700">username</h2>
         </a>

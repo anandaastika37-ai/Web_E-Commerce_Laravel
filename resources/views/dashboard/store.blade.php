@@ -55,7 +55,7 @@
 
             {{-- Aksi --}}
             <div class="flex items-center gap-2 sm:border-l sm:border-gray-200 sm:pl-3">
-                <a href="{{ url('/add') }}" title="Tambah"
+                <a href="{{ route('dashboard.products.create') }}" title="Tambah"
                     class="h-10 px-4 inline-flex items-center gap-2 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold shadow-sm shadow-violet-200 transition">
                     <i class="fa-solid fa-plus text-xs"></i> Tambah
                 </a>
