@@ -2,28 +2,90 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ProductRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
+
     public function authorize(): bool
     {
-        return false;
+        $store = $this->user()?->store;
+        $product = $this->route('product');
+
+        return $store !== null && ($product === null || $product->store_id === $store->id);
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
+    protected function prepareForValidation(): void
+    {
+        $variant = collect($this->input('variant' , []))
+        ->map(function ($var) {
+                if(is_array($var) && isset($var['sku'])){
+                    $var['sku'] = strtoupper($var['sku']);
+                }
+                return $var;
+            })->all();
+
+         $this->merge(['sku' => strtoupper((string) $this->input('sku')) , 'variant' => $variant]);
+    }
+
     public function rules(): array
     {
+        $product = $this->route('product');
         return [
-            //
+            'name'           => ['required', 'string', 'max:255'],
+            'sku'            => ['required', 'string', 'max:50', Rule::unique('products', 'sku')->ignore($product?->id)],
+            'category_id'    => ['required', 'exists:categories,id'],
+            'description'    => ['nullable', 'string', 'max:1000'],
+            'gender'         => ['required', Rule::in(['pria', 'wanita', 'unisex', 'anak'])],
+            'material'       => ['nullable', 'string', 'max:100'],
+            'thumbnail'      => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'remove_thumbnail' => ['boolean'],
+            'price'          => ['required', 'integer', 'min:0', 'max:4294967295'],
+            'discount_price' => ['nullable', 'integer', 'min:0', 'lt:price'],
+            'weight'         => ['required', 'integer', 'min:0', 'max:65535'],
+            'is_active'      => ['boolean'],
+            'is_featured'    => ['boolean'],
+            'variants'             => ['required', 'array', 'min:1'],
+            'variants.*.id'        => ['nullable', 'integer'],
+            'variants.*.color'     => ['required', 'string', 'max:30'],
+            'variants.*.color_hex' => ['nullable', 'hex_color'],
+            'variants.*.size'      => ['required', 'string', 'max:10'],
+            'variants.*.sku'       => ['required', 'string', 'max:60', 'distinct',Rule::unique('product_variants', 'sku')->ignore($product?->id, 'product_id'),],
+            'variants.*.stock'     => ['required', 'integer', 'min:0', 'max:4294967295'],
+            'variants.*.price'     => ['nullable', 'integer', 'min:0', 'max:4294967295'],
+        ];
+    }
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator){
+            $combos = collect($this->input('variant' , []))->map(fn($var) => mb_strtolower(($var['color'] ?? '' ).'|'.($var['size'] ?? '')));
+
+            if ($combos->count() !== $combos->unique()->count()){
+                $validator->errors()->add('variants' , 'Ada kombinasi warna dan ukuran yang sama lebih dari sekali.');
+            }
+        });
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'name' => 'nama produk',
+            'sku' => 'SKU',
+            'category_id' => 'kategori',
+            'description' => 'deskripsi',
+            'material' => 'bahan',
+            'thumbnail' => 'foto utama',
+            'price' => 'harga',
+            'discount_price' => 'harga diskon',
+            'weight' => 'berat',
+            'variants' => 'varian',
+            'variants.*.color' => 'warna varian',
+            'variants.*.color_hex' => 'kode warna',
+            'variants.*.size' => 'ukuran varian',
+            'variants.*.sku' => 'SKU varian',
+            'variants.*.stock' => 'stok varian',
+            'variants.*.price' => 'harga varian',
         ];
     }
 }

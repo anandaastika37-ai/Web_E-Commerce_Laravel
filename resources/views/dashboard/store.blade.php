@@ -1,27 +1,10 @@
 <x-dashboard>
 
-    {{-- header --}}
-    <header class="w-full mb-5 flex flex-wrap items-center justify-between gap-4">
-        <div>
-            <h1 class="mt-1 font-commissioner font-bold text-3xl text-gray-800">Kelola Produk</h1>
-            <p class="text-sm text-gray-500">Atur produk, harga, dan stok tokomu.</p>
-        </div>
-
-        <div class="flex items-center gap-3 rounded-2xl bg-white border border-gray-100 shadow-sm px-4 py-2.5">
-            <span
-                class="w-10 h-10 shrink-0 flex items-center justify-center rounded-xl bg-linear-to-br from-purple-600 to-indigo-800 text-white shadow-md shadow-violet-200">
-                <i class="fa-solid fa-store"></i>
-            </span>
-            <div>
-                <p class="text-xs text-gray-400">Toko</p>
-                <h2 class="text-sm font-semibold text-gray-800">Brand Name</h2>
-            </div>
-        </div>
-    </header>
+    <x-navbar-store></x-navbar-store>
 
     {{-- kelola product --}}
     <div
-        class="w-full flex flex-wrap items-center justify-between gap-3 bg-white p-3 rounded-2xl border border-gray-100 shadow-sm">
+        class="w-full flex flex-wrap items-center justify-between gap-3 bg-white p-3 rounded-2xl border border-gray-100 shadow-sm mt-15">
 
         {{-- Filter --}}
         <div class="filter-product flex flex-wrap items-center gap-2">

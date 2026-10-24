@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -11,6 +12,9 @@ Route::get('/store', function () {
 Route::get('/dashboard', function () {
     return view('dashboard.main-dashboard');
 });
-Route::get('/add', function () {
+
+Route::get('/add' , function(){
     return view('dashboard.add-product');
 });
+
+// Route::resource('add' , ProductController::class)->except('create');
