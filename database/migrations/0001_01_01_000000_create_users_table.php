@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('phone', 20)->nullable();
             $table->string('profile_photo')->nullable();
-            $table->enum('role', ['admin', 'seller', 'buyer'])
+            $table->enum('role', [ 'seller', 'buyer'])
                   ->default('buyer');
             $table->rememberToken();
             $table->timestamps();
