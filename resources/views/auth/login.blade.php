@@ -12,6 +12,10 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
+@if (session('success'))
+    <div class="mt-4 rounded-xl bg-green-50 p-3 text-sm text-green-700">{{ session('success') }}</div>
+@endif
+
 <body class="flex min-h-screen items-center justify-center bg-linear-to-br from-violet-100 via-violet-50 to-indigo-100 p-4 font-['DM_Sans'] text-gray-800">
 
     <!-- Card -->
@@ -25,27 +29,27 @@
             <p class="mt-1 text-sm text-gray-500">Masukkan email dan password untuk melanjutkan.</p>
         </div>
 
-        <form method="POST" action="{{ url('/login') }}" class="mt-6 space-y-4">
+        <form method="POST" action="{{ route('login') }}" class="mt-6 space-y-4">
             @csrf
 
             <!-- Email -->
             <div>
-                <label for="email" class="mb-1.5 block text-sm font-semibold text-gray-700">Email</label>
-                <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus
+                <label for="login" class="mb-1.5 block text-sm font-semibold text-gray-700">Email or Username</label>
+                <input type="text" id="login" name="login" value="{{ old('login') }}" required autofocus autocomplete="off"
                     placeholder="nama@email.com"
                     class="h-11 w-full rounded-xl border border-violet-200 bg-white px-3.5 text-sm outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-100">
-                @error('email')
+                @error('login')
                     <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                 @enderror
             </div>
 
             <!-- Password (ada tombol lihat/sembunyikan) -->
             <div x-data="{ show: false }">
-                <label for="password" class="mb-1.5 block text-sm font-semibold text-gray-700">Password</label>
+                <label for="password" class="mb-1.5 block text-sm font-semibold text-gray-700" >Password</label>
                 <div class="relative">
                     <input :type="show ? 'text' : 'password'" id="password" name="password" required
                         placeholder="Masukkan password"
-                        class="h-11 w-full rounded-xl border border-violet-200 bg-white pl-3.5 pr-10 text-sm outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-100">
+                        class="h-11 w-full rounded-xl border border-violet-200 bg-white pl-3.5 pr-10 text-sm outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-100" autocomplete="off">
                     <button type="button" @click="show = !show" title="Lihat password"
                         class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-violet-600">
                         <i class="fa-solid" :class="show ? 'fa-eye-slash' : 'fa-eye'"></i>
@@ -69,7 +73,7 @@
 
         <p class="mt-6 text-center text-sm text-gray-500">
             Belum punya akun?
-            <a href="{{ url('/register') }}" class="font-semibold text-violet-600 hover:text-violet-800">Daftar</a>
+            <a href="{{ route('register') }}" class="font-semibold text-violet-600 hover:text-violet-800">Daftar</a>
         </p>
     </div>
 

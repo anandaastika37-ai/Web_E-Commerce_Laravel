@@ -1,7 +1,8 @@
 @php
     $user = auth()->user();
     $displayName = $user->username ?? $user->name ?? 'Tamu';
-    $isSeller = 'penjual';
+    $isSeller = (bool) $user?->isSeller();
+     $hasStore = $isSeller && $user->store !== null;
 
     $menus = [
         ['label' => 'Beranda',    'icon' => 'fa-house',         'url' => url('/dashboard'),     'active' => request()->is('dashboard')],
@@ -17,26 +18,42 @@
     <div class="px-6 pt-6 pb-5">
         <a href="{{ url('/') }}" title="Kembali ke toko"
             class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-violet-600 transition">
-            <i class="fa-solid fa-arrow-left text-xs"></i> Kembali ke toko
+            <i class="fa-solid fa-arrow-left text-xs"></i> Kembali ke Beranda
         </a>
         <h2 class="mt-5 font-bold font-commissioner text-3xl text-gray-800">Dashboard</h2>
     </div>
 
     {{-- Kelola Toko (khusus penjual) --}}
     @if ($isSeller)
-        <div class="px-4">
-            <a href="{{ url('store') }}"
+<div class="px-4">
+        @if ($hasStore)
+            {{-- Sudah punya toko --}}
+            <a href="{{ route('dashboard.store') }}"
                 class="group flex items-center gap-3 rounded-2xl bg-linear-to-r from-purple-600 to-indigo-800 p-3 text-white shadow-lg shadow-violet-200 transition hover:-translate-y-0.5 hover:shadow-xl hover:shadow-violet-300">
-                <span class="w-10 h-10 shrink-0 flex items-center justify-center rounded-xl bg-white/20 text-lg">
+                <span class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white/20 text-lg">
                     <i class="fa-solid fa-store"></i>
                 </span>
-                <span class="flex-1 min-w-0">
-                    <span class="block text-sm font-semibold">Kelola Toko</span>
-                    <span class="block text-xs text-white/70">Produk &amp; pesanan</span>
+                <span class="min-w-0 flex-1">
+                    <span class="block truncate text-sm font-semibold">Kelola Toko</span>
+                    <span class="block truncate text-xs text-white/70">{{ $user->store->name }}</span>
                 </span>
                 <i class="fa-solid fa-chevron-right text-xs text-white/70 transition group-hover:translate-x-0.5"></i>
             </a>
-        </div>
+        @else
+            {{-- Belum punya toko --}}
+            <a href="{{ route('store.setup') }}"
+                class="group flex items-center gap-3 rounded-2xl border-2 border-dashed border-violet-300 bg-violet-50 p-3 text-violet-700 transition hover:-translate-y-0.5 hover:border-violet-500 hover:bg-violet-100">
+                <span class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-violet-600 text-lg text-white">
+                    <i class="fa-solid fa-plus"></i>
+                </span>
+                <span class="min-w-0 flex-1">
+                    <span class="block text-sm font-semibold">Buat Toko</span>
+                    <span class="block text-xs text-violet-600/80">Mulai berjualan sekarang</span>
+                </span>
+                <i class="fa-solid fa-chevron-right text-xs text-violet-400 transition group-hover:translate-x-0.5"></i>
+            </a>
+        @endif
+    </div>
     @endif
 
     {{-- Menu --}}
@@ -76,7 +93,7 @@
 
     {{-- Username + role (paling bawah) --}}
     <div class="p-4 border-t border-gray-100">
-        <a href="{{ url('/profile') }}" title="Lihat profil"
+        <a href="{{ route('profile') }}" title="Lihat profil"
             class="group flex items-center gap-3 rounded-xl p-2 transition hover:bg-gray-50">
             <div class="w-11 h-11 shrink-0 flex items-center justify-center rounded-full bg-linear-to-br from-purple-600 to-indigo-800 text-white font-bold text-lg shadow-md shadow-violet-200">
                 {{ strtoupper(mb_substr($displayName, 0, 1)) }}

@@ -25,7 +25,7 @@
             <p class="mt-1 text-sm text-gray-500">Isi data berikut untuk mulai belanja atau berjualan.</p>
         </div>
 
-        <form method="POST" action="{{ url('/register') }}" class="mt-6 space-y-4">
+        <form method="POST" action="{{ route('register') }}" class="mt-6 space-y-4">
             @csrf
 
             <!-- Nama & username -->
@@ -43,7 +43,8 @@
                 <div>
                     <label for="username" class="mb-1.5 block text-sm font-semibold text-gray-700">Username</label>
                     <input type="text" id="username" name="username" value="{{ old('username') }}" required maxlength="50"
-                        placeholder="nama_pengguna"
+                    pattern="[A-Za-z0-9_\-]+" title="Hanya huruf, angka, garis bawah (_), dan strip (-)"
+                    autocomplete="username" placeholder="nama_pengguna"
                         class="h-11 w-full rounded-xl border border-violet-200 bg-white px-3.5 text-sm outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-100">
                     @error('username')
                         <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
@@ -79,13 +80,13 @@
                 <div class="grid grid-cols-2 gap-2">
                     <label class="cursor-pointer">
                         <input type="radio" name="role" value="buyer" class="peer sr-only" @checked(old('role', 'buyer') === 'buyer')>
-                        <span class="flex h-11 items-center justify-center gap-2 rounded-xl border border-violet-200 bg-white text-sm font-semibold text-violet-800 peer-checked:border-violet-600 peer-checked:bg-violet-600 peer-checked:text-white">
+                        <span class="flex h-11 items-center justify-center gap-2 rounded-xl border border-violet-200 bg-white text-sm font-semibold text-violet-800 peer-checked:border-violet-600 peer-checked:bg-violet-600 peer-checked:text-white peer-focus-visible:ring-4 peer-focus-visible:ring-violet-200">
                             <i class="fa-solid fa-bag-shopping text-xs"></i> Pembeli
                         </span>
                     </label>
                     <label class="cursor-pointer">
                         <input type="radio" name="role" value="seller" class="peer sr-only" @checked(old('role') === 'seller')>
-                        <span class="flex h-11 items-center justify-center gap-2 rounded-xl border border-violet-200 bg-white text-sm font-semibold text-violet-800 peer-checked:border-violet-600 peer-checked:bg-violet-600 peer-checked:text-white">
+                        <span class="flex h-11 items-center justify-center gap-2 rounded-xl border border-violet-200 bg-white text-sm font-semibold text-violet-800 peer-checked:border-violet-600 peer-checked:bg-violet-600 peer-checked:text-white peer-focus-visible:ring-4 peer-focus-visible:ring-violet-200">
                             <i class="fa-solid fa-store text-xs"></i> Penjual
                         </span>
                     </label>
@@ -135,7 +136,7 @@
 
         <p class="mt-6 text-center text-sm text-gray-500">
             Sudah punya akun?
-            <a href="{{ url('/login') }}" class="font-semibold text-violet-600 hover:text-violet-800">Masuk</a>
+            <a href="{{ route('login') }}" class="font-semibold text-violet-600 hover:text-violet-800">Masuk</a>
         </p>
     </div>
 
