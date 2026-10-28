@@ -14,7 +14,7 @@ class RoleMiddleware
         $user = $request->user();
 
         if(! $user || ! $user->hasRole(...$roles)){
-            abort(403 , 'Anda Tidak Punya Akses Ke Halaman Ini');
+            abort(403, 'Role Anda: ' . ($user->role ?? 'tamu') . ' | dibutuhkan: ' . implode('/', $roles));
         }
         return  $next($request);
     }

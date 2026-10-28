@@ -67,7 +67,7 @@ class AuthController extends Controller
     protected function homeFor(User $user): string{
         return match ($user->role) {
             User::ROLE_BUYER => route('dashboard') ,
-            User::ROLE_SELLER => route('dashboard.store'),
+            User::ROLE_SELLER => route('dashboard'),
             default => route('home')
         };
     }

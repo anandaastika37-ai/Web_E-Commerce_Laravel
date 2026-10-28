@@ -18,15 +18,32 @@ class ProductRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        $variant = collect($this->input('variant' , []))
-        ->map(function ($var) {
-                if(is_array($var) && isset($var['sku'])){
-                    $var['sku'] = strtoupper($var['sku']);
+        $variants = collect($this->input('variants', []))
+            ->map(function ($variant) {
+                if (is_array($variant) && isset($variant['sku'])) {
+                    $variant['sku'] = strtoupper($variant['sku']);
                 }
-                return $var;
-            })->all();
+                return $variant;
+            })
+            ->all();
 
-         $this->merge(['sku' => strtoupper((string) $this->input('sku')) , 'variant' => $variant]);
+        $this->merge([
+            'sku'      => strtoupper((string) $this->input('sku')),
+            'variants' => $variants,
+        ]);
+    }
+
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator) {
+            $combos = collect($this->input('variants', []))
+                ->filter(fn($v) => is_array($v))
+                ->map(fn($v) => mb_strtolower(trim($v['color'] ?? '')) . '|' . mb_strtolower(trim($v['size'] ?? '')));
+
+            if ($combos->count() !== $combos->unique()->count()) {
+                $validator->errors()->add('variants', 'Ada kombinasi warna dan ukuran yang sama lebih dari sekali.');
+            }
+        });
     }
 
     public function rules(): array
@@ -51,20 +68,10 @@ class ProductRequest extends FormRequest
             'variants.*.color'     => ['required', 'string', 'max:30'],
             'variants.*.color_hex' => ['nullable', 'hex_color'],
             'variants.*.size'      => ['required', 'string', 'max:10'],
-            'variants.*.sku'       => ['required', 'string', 'max:60', 'distinct',Rule::unique('product_variants', 'sku')->ignore($product?->id, 'product_id'),],
+            'variants.*.sku'       => ['required', 'string', 'max:60', 'distinct', Rule::unique('product_variants', 'sku')->ignore($product?->id, 'product_id'),],
             'variants.*.stock'     => ['required', 'integer', 'min:0', 'max:4294967295'],
             'variants.*.price'     => ['nullable', 'integer', 'min:0', 'max:4294967295'],
         ];
-    }
-    public function withValidator($validator): void
-    {
-        $validator->after(function ($validator){
-            $combos = collect($this->input('variant' , []))->map(fn($var) => mb_strtolower(($var['color'] ?? '' ).'|'.($var['size'] ?? '')));
-
-            if ($combos->count() !== $combos->unique()->count()){
-                $validator->errors()->add('variants' , 'Ada kombinasi warna dan ukuran yang sama lebih dari sekali.');
-            }
-        });
     }
 
     public function attributes(): array

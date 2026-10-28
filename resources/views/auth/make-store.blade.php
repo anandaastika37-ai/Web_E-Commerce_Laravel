@@ -109,7 +109,7 @@
             <button type="submit"
                 class="h-11 w-full rounded-xl bg-violet-600 text-sm font-semibold text-white hover:bg-violet-700 active:scale-95">
                 Buat Toko
-            </button>
+            </button cl>
         </form>
 
         <div class="mt-6 flex items-center justify-between text-sm text-gray-500">

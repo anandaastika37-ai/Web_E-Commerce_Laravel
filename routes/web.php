@@ -43,13 +43,14 @@ Route::middleware(['auth', 'role:buyer'])->prefix('buyer')->name('buyer.')->grou
     Route::view('/dashboard', 'dashboard.main-dashboard')->name('dashboard');
 });
 
+
+
 // Khusus seller
 Route::middleware(['auth', 'role:seller'])->group(function () {
 
     // di luar grup bernama 'dashboard.'
-    Route::get('/store/build', [StoreController::class, 'index'])->name('store.setup');
-    Route::post('/store', [StoreController::class, 'store'])->name('store.store');
-    Route::view('/dashboard', 'dashboard.main-dashboard')->name('dashboard');
+    Route::get('/store/create', [StoreController::class, 'index'])->name('store.setup');
+    Route::post('/store/made', [StoreController::class, 'store'])->name('store.store');
 
     Route::prefix('store')->name('dashboard.')->group(function () {
         Route::get('/', [ProductController::class, 'index'])->name('store');

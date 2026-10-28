@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Store;
-use Illuminate\Support\Arr;
+use Illuminate\Support\{Str,Arr};
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\ProductRequest;
@@ -27,7 +27,6 @@ class ProductController extends Controller
     public function create()
     {
         $this->currentStore();
-
         return view('dashboard.add-product', ['product' => new Product(['gender' => 'unisex', 'is_active' => true]), 'categories' => Category::orderBy('name')->get()]);
     }
 
@@ -141,7 +140,8 @@ class ProductController extends Controller
     {
         return [
             ...Arr::except($data, ['variants', 'thumbnail', 'remove_thumbnail']),
-            'brand' => $store->name
+            'brand' => $store->name,
+            'slug' => Str::slug($data['name'] . '-' . $data['sku']),
         ];
     }
 }

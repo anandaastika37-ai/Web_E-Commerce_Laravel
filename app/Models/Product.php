@@ -33,7 +33,7 @@ class Product extends Model
         return $this->belongsTo(category::class);
     }
 
-    public function Variant(): HasMany{
+    public function variants(): HasMany{
         return $this->hasMany(ProductVariant::class);
     }
     public function Store(): BelongsTo{

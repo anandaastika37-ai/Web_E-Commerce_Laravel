@@ -12,7 +12,9 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
+            $table->foreignId('store_id')->constrained('stores')->cascadeOnDelete();
             $table->string('name');
+            $table->string('sku', 50)->nullable()->unique();
             $table->string('slug')->unique();
             $table->string('brand', 100)->nullable();
             $table->text('description')->nullable();
